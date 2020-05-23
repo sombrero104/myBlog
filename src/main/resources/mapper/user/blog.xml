@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my.user.mapper.BlogMapper">
+
+    <select id="selectBlog" parameterType="String" resultType="blog">
+        SELECT
+            ID, TITLE, CONTENT, date_format(REG_DATE, '%Y-%m-%d %H:%i:%s') AS REG_DATE
+            , (SELECT NAME FROM CATEGORY WHERE ID = b.CATEGORY_ID) AS CATEGORY
+            , (SELECT NAME FROM CATEGORY_DIV WHERE ID = (SELECT CATEGORY_DIV_ID FROM CATEGORY WHERE ID = b.CATEGORY_ID)) AS CATEGORY_DIV
+        FROM BLOG b
+        <choose>
+            <when test="id != null and !id.equals('')">
+                WHERE ID = #{id}
+            </when>
+            <otherwise>
+                ORDER BY ID DESC
+                LIMIT 1
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectBlogListTotalCount" parameterType="blog" resultType="int">
+        SELECT
+            COUNT(ID)
+        FROM BLOG
+    </select>
+
+    <select id="selectBlogList" parameterType="blog" resultType="blog">
+        SELECT
+            ID, TITLE, CONTENT, date_format(REG_DATE, '%Y-%m-%d %H:%i:%s') AS REG_DATE
+        FROM BLOG
+        ORDER BY ID DESC
+        LIMIT #{page.start}, #{page.end}
+    </select>
+
+    <select id="selectBlogViewList" parameterType="String" resultType="blog">
+        SELECT
+        ID, TITLE, date_format(REG_DATE, '%Y-%m-%d %H:%i:%s') AS REG_DATE
+        FROM BLOG
+        <choose>
+            <when test="id != null and !id.equals('')">
+                WHERE ID BETWEEN (#{id} - 2) AND (#{id} + 2)
+            </when>
+        </choose>
+        ORDER BY ID DESC
+        <choose>
+            <when test="id != null and !id.equals('')">
+                LIMIT 5
+            </when>
+            <otherwise>
+                LIMIT 3
+            </otherwise>
+        </choose>
+    </select>
+
+    <update id="updateBlog" parameterType="blog">
+        UPDATE BLOG
+        SET
+            TITLE = #{title}
+            , CONTENT = #{content}
+        WHERE ID = #{id}
+    </update>
+
+    <insert id="insertBlog" parameterType="blog">
+        <selectKey keyProperty="id" resultType="String" order="AFTER">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO BLOG (TITLE, CONTENT, CATEGORY_ID)
+        VALUES (#{title}, #{content}, #{category_id})
+    </insert>
+
+</mapper>

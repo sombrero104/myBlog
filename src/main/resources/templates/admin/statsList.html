@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Stats</title>
+    <header th:replace="common/header" />
+</head>
+<body>
+<div class="content">
+    <h1>Stats</h1>
+    <h3>Login Stats</h3>
+    <div class="table_div">
+        <table>
+            <tr>
+                <th width="30%">USER</th>
+                <th width="30%">ACTIVITY</th>
+                <th width="30%">DATE</th>
+            </tr>
+            <tr th:each="tempStats : ${statsList}">
+                <td th:text="${tempStats.username}"></td>
+                <td style="text-align: center;" th:text="${tempStats.activity}"></td>
+                <td th:text="${tempStats.reg_date}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:replace="common/pagination :: frag('admin/statsList')" />
+
+    <footer th:replace="common/footer" />
+</div>
+</body>
+</html>

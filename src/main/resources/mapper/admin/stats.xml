@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my.admin.mapper.StatsMapper">
+
+    <select id="selectStatsLoginListTotalCount" parameterType="stats" resultType="int">
+        SELECT
+            COUNT(ID)
+        FROM STATS_LOGIN
+    </select>
+
+    <select id="selectStatsLoginList" parameterType="stats" resultType="stats">
+        SELECT
+            USERNAME, ACTIVITY, date_format(REG_DATE, '%Y-%m-%d %H:%i:%s') AS REG_DATE
+        FROM STATS_LOGIN
+        ORDER BY ID DESC
+        LIMIT #{page.start}, #{page.end}
+    </select>
+
+</mapper>

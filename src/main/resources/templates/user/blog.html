@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <header th:replace="common/header" />
+</head>
+<body>
+    <div class="content">
+        <h1>Blog</h1>
+        <div class="board_button">
+            <input type="button" value="List" onclick="location.href='/blogList'" />
+            <input class="right" sec:authorize-expr="hasAnyRole('ROLE_ADMIN')" type="button" value="Update"
+                   th:onclick="'location.href = \'' + @{/blogUpdate/{id}(id=${blog.id})} + '\''">
+        </div>
+        <div class="table_div">
+            <table>
+                <tr><td>카테고리: </td><td colspan="3" th:text="${blog.category_div} + ' > ' + ${blog.category}"></td></tr>
+                <tr>
+                    <td>제목: </td><td th:text="${blog.title}"></td>
+                    <td>작성일: </td><td th:text="${blog.reg_date}"></td></tr>
+                <tr><td>내용: </td></td><td colspan="3" th:utext="${blog.content}"></td></tr>
+            </table>
+        </div>
+        <div class="table_div">
+            <table>
+                <tr th:each="tempBlog : ${blogList}">
+                    <td th:if="${tempBlog.id == blog.id}">
+                        <h3><a th:text="${tempBlog.title}" th:href="@{'/blog/' + ${tempBlog.id}}"></a></h3>
+                    </td>
+                    <td th:unless="${tempBlog.id == blog.id}">
+                        <a th:text="${tempBlog.title}" th:href="@{'/blog/' + ${tempBlog.id}}"></a>
+                    </td>
+                    <td th:text="${tempBlog.reg_date}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <footer th:replace="common/footer" />
+</body>
+</html>

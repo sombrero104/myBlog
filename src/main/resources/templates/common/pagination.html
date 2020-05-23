@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="frag(path)" class="page"
+     th:with="start=${((page.currentPage-1)/page.pageSize)*page.pageSize + 1},
+                  end=(${(page.totalPages == 0) ? 1 : (start + (10 - 1) < page.totalPages ? start + (10 - 1) : page.totalPages)})" >
+    <ul>
+        <li th:if="${start > 1}">
+            <a th:href="@{'/' + ${path} + '/1'}" th:text="'<<'"></a></li>
+        </li>
+
+        <li th:if="${start > 1}">
+            <a th:href="@{'/' + ${path} + '/' + ${start - page.pageSize}}" th:text="'<'"></a>
+        </li>
+
+
+        <li th:each="pageNum : ${#numbers.sequence(start, end)}">
+            <a th:href="@{'/' + ${path} + '/' + ${pageNum}}" th:text="${pageNum}"></a></li>
+        </li>
+
+        <li th:if="${end < page.totalPages}">
+            <a th:href="@{'/' + ${path} + '/' + ${start + page.pageSize}}" th:text="'>'"></a>
+        </li>
+
+        <li th:if="${end < page.totalPages}">
+            <a th:href="@{'/' + ${path} + '/' + ${page.totalPages}}" th:text="'>>'"></a></li>
+        </li>
+    </ul>
+</div>
+
+<div>
+    <input type="hidden" id="start" th:value="${start}" />
+    <input type="hidden" id="end" th:value="${end}" />
+    <input type="hidden" id="currentPage" th:value="${page.currentPage}" />
+    <input type="hidden" id="pageSize" th:value="${page.pageSize}" />
+    <input type="hidden" id="totalPages" th:value="${page.totalPages}" />
+    <input type="hidden" id="totalCount" th:value="${page.totalCount}" />
+</div>
+</html>

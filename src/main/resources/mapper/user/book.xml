@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my.user.mapper.BookMapper">
+
+    <select id="selectBook" parameterType="String" resultType="book">
+        SELECT
+            ID, TITLE, CONTENT, AUTHOR, date_format(REG_DATE, '%Y-%m-%d %H:%i:%s') AS REG_DATE
+        FROM BOOK
+        WHERE ID = #{id}
+    </select>
+
+    <select id="selectBookListTotalCount" parameterType="book" resultType="int">
+        SELECT
+            COUNT(ID)
+        FROM BOOK
+    </select>
+
+    <select id="selectBookList" parameterType="book" resultType="book">
+        SELECT
+            ID, TITLE, CONTENT, date_format(REG_DATE, '%Y-%m-%d %H:%i:%s') AS REG_DATE
+        FROM BOOK
+        ORDER BY ID DESC
+        LIMIT #{page.start}, #{page.end}
+    </select>
+
+    <update id="updateBook" parameterType="book">
+        UPDATE BOOK
+        SET
+        TITLE = #{title}
+        , CONTENT = #{content}
+        WHERE ID = #{id}
+    </update>
+
+    <insert id="insertBook" parameterType="book">
+        <selectKey keyProperty="id" resultType="String" order="AFTER">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+        INSERT INTO BOOK (TITLE, CONTENT, AUTHOR)
+        VALUES (#{title}, #{content}, #{author})
+    </insert>
+
+</mapper>

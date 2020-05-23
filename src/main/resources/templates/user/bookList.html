@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+    <header th:replace="common/header" />
+</head>
+<body>
+<div class="content">
+    <h1>Book List</h1>
+
+    <div class="div_right"><input sec:authorize-expr="hasAnyRole('ROLE_ADMIN')" type="button" value="Write" onclick="location.href='/bookWrite'" /></div>
+    <div class="table_div">
+        <table>
+            <tr>
+                <th width="50%">IMAGE</th>
+                <th width="50%">TITLE</th>
+            </tr>
+            <tr th:each="tempBook, index : ${bookList}">
+                <td style="text-align: center;">
+                    <img src="/img/no_image.png" width="100px" />
+                </td>
+                <td style="text-align: center;">
+                    <a th:text="${tempBook.title}" th:href="@{'/book/' + ${tempBook.id}}"></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:replace="common/pagination :: frag('bookList')" />
+</div>
+<footer th:replace="common/footer" />
+</body>
+</html>

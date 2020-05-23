@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <header th:replace="common/header" />
+</head>
+<body>
+<div class="content">
+    <h1>Blog Update</h1>
+    <form action="/blogUpdate" method="post" th:action="@{/blogUpdate}">
+    <input type="hidden" id="id" name="id" th:value="${blog.id}">
+    <div class="table_div">
+        <table>
+            <tr><td>카테고리: </td><td colspan="3" th:text="${blog.category_div} + ' > ' + ${blog.category}"></td></tr>
+            <tr><td>제목: </td><td><input type="text" id="title" name="title" th:value="${blog.title}"></td></tr>
+            <tr><td>내용: </td></td><td colspan="3"><input type="text" id="content" name="content" th:value="${blog.content}"></td></tr>
+        </table>
+    </div>
+    <div class="div_right"><input type="submit" value="Update" /></div>
+    </form>
+</div>
+<footer th:replace="common/footer" />
+</body>
+</html>

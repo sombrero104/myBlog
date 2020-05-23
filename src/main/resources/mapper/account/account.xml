@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="my.account.mapper.AccountMapper">
+
+    <select id="findByUsername" parameterType="String" resultType="account">
+        SELECT
+            ID, USERNAME, PASSWORD, ROLE
+        FROM ACCOUNT
+        WHERE USERNAME = #{username}
+    </select>
+
+    <insert id="createNewAccount" parameterType="account">
+        INSERT INTO ACCOUNT (username, password, role)
+        VALUES (#{username}, #{password}, #{role})
+    </insert>
+
+    <insert id="insertLoginLog" parameterType="String">
+        INSERT INTO STATS_LOGIN (USERNAME, ACTIVITY)
+        VALUES (#{username}, 'login')
+    </insert>
+
+</mapper>
